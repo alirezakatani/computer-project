@@ -24,8 +24,8 @@ typedef struct goodprofile//seller
     float  price;
     char explanation[200];
     int num;
-    char type;
-
+    char type[100];
+    int score;
 } good;
 typedef struct member//submit
 {
@@ -37,7 +37,17 @@ typedef struct member//submit
     char type[100];
     char homeaddrese[10000];
     char workaddrese[10000];
+    struct opinions;
 } memb;
+typedef struct opinions
+{
+    char opinion[10000];
+    int year;
+    int mounth;
+    int day;
+    int hour;
+
+}
 
 int main()
 {
@@ -341,6 +351,19 @@ int  survey(char c[])
         puts("we have 3itemes now\nif you want to add a filter please inter number1");
         puts("if you want to searching item number2\ for see  item number 3\nand if you want to go to the main page inter -1 ");
         puts("Foodstuff  \t   Stationery  \t   Digital goods");
+        FILE *ptr=fopen ("good.bin", "rb");
+        fseek (ptr,-sizeof (struct goodprofile), SEEK_SET);
+        if (ptr)
+        {
+            while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
+            {
+                printf ("%s,%f,%s,%d,%s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
+                //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+            }
+
+            fclose (ptr);
+        }
+
         puts("if you want to see just \n1 super market num4\nstationary num5\ndigital goods num6");
         puts("if you want too add comment num 7\nto buy num 8");
         //open the file of goods &show it(print file)
@@ -731,8 +754,8 @@ void newgood(void)
         }
 
 
-}
-while(a!=-1);
+    }
+    while(a!=-1);
 
 }
 
