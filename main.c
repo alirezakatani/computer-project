@@ -8,7 +8,7 @@ void seller();
 void sell(int price);
 void transfer (int price);
 void admin(void);
-///void ssort(file);
+void ssort(char thing[],char nameseller[]);
 ///void search (file,char c[]);
 ///void basket(file);
 void Purchasedgoods(void);
@@ -220,7 +220,7 @@ void seller(void)
     system("color a1");
     system("cls");
     printf("welcome to the customer page");
-    puts("for add goods num1\nsee what you sold num2\n see opnions num3\nchange Specifications num 3\n surving num4\nTransfer to account num5 ");
+    puts("for add goods and sorting num1\nsee what you sold num2\n see opnions num3\nchange Specifications num 3\n surving num4\nTransfer to account num5 ");
     //open file seller have link list for selles
     //open comment file
     int a;
@@ -410,7 +410,7 @@ int  survey(char type[])
         {
         case 1:
             //send goods file to function ssort
-            ///ssort(file);
+            ssort("goods","");
             break;
 
         case 2:
@@ -507,8 +507,8 @@ int  survey(char type[])
                 while(fread(&goods, sizeof (struct goodprofile), 1, ptu)) ///ok shod
                 {
                     if(strcmp("Digital goods",goods.type)==0||strcmp("Digital goods",goods.type))
-                {
-                    printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
 
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
@@ -533,8 +533,8 @@ int  survey(char type[])
                     {
                         if(strcmp(namecom,goods.name)==0)
                         {
-                            pri
-                            fwrite()
+                            /*pri
+                            fwrite()*/
 
                         }
                     }
@@ -568,27 +568,155 @@ int  survey(char type[])
 
 
 
-void ssort(char c)
+void ssort(char thing[],char sellername[])
 {
-    if(c=='s')
+    if(strcmp(thing,"good"))
     {
-
-
-        //strucure
         printf("what kind of sort do you want 1-on price num 1\n 2-on score num 2");
         int a;
         scanf("%d",&a);
         if(a==1)
         {
             //print structure on price
+            good goods;
+            int i;
+            int price[2][1000];
+            i=0;
+            int n=0;
+            FILE *pyy=fopen ("good.bin", "a+b");
+            fseek (pyy,-sizeof (struct goodprofile), SEEK_SET);
+            if (pyy)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
+                {
+                    printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.price,goods.explanation,goods.num);
+                    price[0][i]=i;
+                    price[1][i]=goods.price;
+                    i++;
+                    n++;
+                }
+                price[2][i+1]=0;
+            }
+            fclose(pyy);
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",price[0][i],price[1][i]);
+            }
+            int temp=0;
+            int temp1=0;
+            int j=0;
+            for(i=0; i<n; i++)
+            {
+                for(j=i; j<n; j++)
+                {
+                    if(price[1][j]<price[1][i])
+                    {
+                        temp=price[1][j];
+                        price[1][j]=price[1][i];
+                        price[1][i]=temp;
+                        temp1=price[0][j];
+                        price[0][j]=price[0][i];
+                        price[0][i]=temp1;
+                    }
+                }
+
+            }
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",price[0][i],price[1][i]);
+            }
+            i=0;
+            //fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+
+            for(j=0; j<4; j++)
+            {
+                FILE *pcc=fopen ("good.bin", "a+b");
+                fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+                i=0;
+                while(fread(&goods, sizeof (struct goodprofile), 1, pcc)!=0) ///ok shod
+                {
+                    if(price[0][j]==i)
+                    {
+                        printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.price,goods.explanation,goods.num);
+                    }
+                    i++;
+
+                }
+            }
+
 
         }
         else
         {
-            //print structure on score
+
+            int score[2][1000];
+            good goods;
+            int i=0;
+            int n=0;
+            FILE *pyy=fopen ("good.bin", "a+b");
+            fseek (pyy,-sizeof (struct goodprofile), SEEK_SET);
+            if (pyy)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
+                {
+                    printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.score,goods.explanation,goods.num);
+                    score[0][i]=i;
+                    score[1][i]=goods.score;
+                    i++;
+                    n++;
+                }
+                score[2][i+1]=0;
+            }
+            fclose(pyy);
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",score[0][i],score[1][i]);
+            }
+            int temp=0;
+            int temp1=0;
+            int j=0;
+            for(i=0; i<n; i++)
+            {
+                for(j=i; j<n; j++)
+                {
+                    if(score[1][j]>score[1][i])
+                    {
+                        temp=score[1][j];
+                        score[1][j]=score[1][i];
+                        score[1][i]=temp;
+                        temp1=score[0][j];
+                        score[0][j]=score[0][i];
+                        score[0][i]=temp1;
+                    }
+                }
+
+            }
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",score[0][i],score[1][i]);
+            }
+            i=0;
+            //fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+
+            for(j=0; j<4; j++)
+            {
+                FILE *pcc=fopen ("good.bin", "a+b");
+                fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+                i=0;
+                while(fread(&goods, sizeof (struct goodprofile), 1, pcc)!=0) ///ok shod
+                {
+                    if(score[0][j]==i)
+                    {
+                        printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.score,goods.explanation,goods.num);
+                    }
+                    i++;
+
+                }
+            }
+
         }
     }
-    else if(c=='c')
+    else if()
     {
         printf("what kind of sort do you want 1-on price num 1\n on history num 2");
         int a;
@@ -601,6 +729,153 @@ void ssort(char c)
         else
         {
             //print structure on score
+        }
+    }
+    else if(strcmp(thing,"seller"))
+    {
+        printf("if you want to sort based on number of thing num1\if you want to sort based on score num 2");
+        int h;
+        scanf("%d",&h);
+        if(h==1)
+        {
+            int num[2][1000];
+            int i=0;
+            int n=0;
+            FILE *pyy=fopen ("good.bin", "a+b");
+            fseek (pyy,-sizeof (struct goodprofile), SEEK_SET);
+            if (pyy)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
+                {
+                    if(strcmp(goods.nameseller,"ali")==0)
+                    {
+                        printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.num,goods.explanation,goods.num);
+                        num[0][i]=i;
+                        num[1][i]=goods.num;
+                        n++;
+                    }
+                    i++;
+                }
+                num[2][i+1]=0;
+            }
+            //fclose(pyy);
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",num[0][i],num[1][i]);
+            }
+            int temp=0;
+            int temp1=0;
+            int j=0;
+            for(i=0; i<n; i++)
+            {
+                for(j=i; j<n; j++)
+                {
+                    if(num[1][j]>num[1][i])
+                    {
+                        temp=num[1][j];
+                        num[1][j]=num[1][i];
+                        num[1][i]=temp;
+                        temp1=num[0][j];
+                        num[0][j]=num[0][i];
+                        num[0][i]=temp1;
+                    }
+                }
+
+            }
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",num[0][i],num[1][i]);
+            }
+            i=0;
+            //fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+
+            for(j=0; j<n; j++)
+            {
+                FILE *pcc=fopen ("good.bin", "a+b");
+                fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+                i=0;
+                while(fread(&goods, sizeof (struct goodprofile), 1, pcc)!=0) ///ok shod
+                {
+                    if(num[0][j]==i)
+                    {
+                        printf ("%s  %d\n",goods.nameseller,goods.num);
+                    }
+                    i++;
+
+                }
+            }
+
+        }
+        if(h==2)
+        {
+            int score[2][1000];
+            int i=0;
+            int n=0;
+            FILE *pyy=fopen ("good.bin", "a+b");
+            fseek (pyy,-sizeof (struct goodprofile), SEEK_SET);
+            if (pyy)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
+                {
+                    if(strcmp(goods.nameseller,sellername)==0)
+                    {
+                        printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.score,goods.explanation,goods.num);
+                        score[0][i]=i;
+                        score[1][i]=goods.score;
+                        n++;
+                    }
+                    i++;
+                }
+                score[2][i+1]=0;
+            }
+            //fclose(pyy);
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",score[0][i],score[1][i]);
+            }
+            int temp=0;
+            int temp1=0;
+            int j=0;
+            for(i=0; i<n; i++)
+            {
+                for(j=i; j<n; j++)
+                {
+                    if(score[1][j]>score[1][i])
+                    {
+                        temp=score[1][j];
+                        score[1][j]=score[1][i];
+                        score[1][i]=temp;
+                        temp1=score[0][j];
+                        score[0][j]=score[0][i];
+                        score[0][i]=temp1;
+                    }
+                }
+
+            }
+            for(i=0; i<n; i++)
+            {
+                printf("%d   %d\n",score[0][i],score[1][i]);
+            }
+            i=0;
+            //fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+
+            for(j=0; j<n; j++)
+            {
+                FILE *pcc=fopen ("good.bin", "a+b");
+                fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
+                i=0;
+                while(fread(&goods, sizeof (struct goodprofile), 1, pcc)!=0) ///ok shod
+                {
+                    if(score[0][j]==i)
+                    {
+                        printf ("%s  %d\n",goods.nameseller,goods.score);
+                    }
+                    i++;
+
+                }
+            }
+
+
         }
     }
 }
@@ -847,7 +1122,7 @@ void newgood(void)
 
         if(a==2)
         {
-            //ssort();//send file or name file to it and use the link list
+            ssort("seller");
         }
 
 
