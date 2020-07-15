@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <stdlib.h>
-int survey(char c[]);
+#include <string.h>
+int survey(char type[]);
 int submit();
 void login();
 void seller();
@@ -18,27 +19,7 @@ void soldgood(void);//send file of customer or boss
 void comment(char c[]);//send name of boss or customer
 void bossmangerin(char c[]);///send name of file of boss too
 void usres(char c[]);//send file of boss
-typedef struct goodprofile//seller
-{
-    char name[100];
-    float  price;
-    char explanation[200];
-    int num;
-    char type[100];
-    int score;
-} good;
-typedef struct member//submit
-{
-    char name[100];
-    char familyname[100];
-    char username[1000];
-    char password[10000];
-    char phonenumber[15];
-    char type[100];
-    char homeaddrese[10000];
-    char workaddrese[10000];
-    struct opinions;
-} memb;
+
 typedef struct opinions
 {
     char opinion[10000];
@@ -47,7 +28,31 @@ typedef struct opinions
     int day;
     int hour;
 
-}
+} opinions;
+typedef struct goodprofile//seller
+{
+    char name[1000];
+    float  price;
+    char explanation[200];
+    int num;
+    char type[100];
+    int score;
+    char nameseller[100];
+    struct opinions opin;
+} good;
+typedef struct member//submit
+{
+    char name[100];
+    char familyname[100];
+    char username[1000];
+    char password[1000];
+    char phonenumber[15];
+    char type[100];
+    char homeaddrese[10000];
+    char workaddrese[10000];
+
+} memb;
+
 
 int main()
 {
@@ -137,16 +142,42 @@ void login()
 {
 
     //openn file declare in submit
-
-    char a[20];
+    FILE *ptr=fopen("memberspe","a+b");
+    char username[1000];
     printf("plese inter your username");
-    scanf("%s",&a);
+    gets(username);
     printf("plese inter your password");
-    //check information with these
-    //return file or name of the file for seller or customer back to the survey
-    int c;
-    scanf("%d",&c);
+    char password[1000];
+    gets(password);
+    memb members;
     ///customer(file or name of the file)||seller(file or name of file)
+    fseek (ptr,-sizeof (struct member), SEEK_SET);
+    if (ptr)
+    {
+        while(fread(&members, sizeof (struct member), 1, ptr)) ///ok shod
+        {
+            if(strcmp(password,members.password)==0&&strcmp(username,members.username)==0)
+            {
+                if(strcmp(members.type,"customer"))
+                {
+                    survey("customer");
+                }
+                else if(strcmp(members.type,"seller"))
+                {
+                    seller();
+                }
+
+
+            }
+            else
+            {
+                printf("sorry your username or password isnt true please inter again");
+                login();
+            }
+        }
+        fclose (ptr);
+    }
+
 
 }
 
@@ -340,8 +371,9 @@ void user(char c[])
 
     }
 }
-int  survey(char c[])
+int  survey(char type[])
 {
+    good goods;
     do
     {
 
@@ -357,7 +389,7 @@ int  survey(char c[])
         {
             while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
             {
-                printf ("%s,%f,%s,%d,%s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
+                printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
                 //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
             }
 
@@ -383,72 +415,138 @@ int  survey(char c[])
 
         case 2:
             //send goods file & name that we need to search
+            printf("please inter name of good you want to search");
+            char name[1000];
+            gets(name);
+            FILE *ptr=fopen ("good.bin", "a+b");
+            fseek (ptr,-sizeof (struct goodprofile), SEEK_SET);
+            if (ptr)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
+                {
+                    if(strcmp(name,goods.name)==0)
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+                    }
+                }
+            }
+            fclose(ptr);
             ///search(file ,char c[]);
             break;
         case 3:
-            printf("please inter the code of the item\n");
-            ///search (file,char c[])
-            printf("if you want to see proposal of item num 1\n");
-            //print propasol
+            printf("please inter name of good");
+            char namese[1000];
+            gets(namese);
+            FILE *ptt=fopen ("good.bin", "a+b");
+            fseek (ptt,-sizeof (struct goodprofile), SEEK_SET);
+            if (ptt)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, ptt)) ///ok shod
+                {
+                    if(strcmp(namese,goods.name)==0)
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+                    }
+                }
+            }
+            fclose(ptt);
+
             break;
 
 
         case 4:
-            //print link list of food in file
-            printf("food market");
 
-            int d;
-            scanf("%d",&d);
-            printf("if you want to see the sort inter num 1\n");
-            if(d==1)
+            printf("food market");
+            FILE *ptz=fopen ("good.bin", "a+b");
+            fseek (ptz,-sizeof (struct goodprofile), SEEK_SET);
+            if (ptz)
             {
-                ssort('s');
-                //get structure
+                while(fread(&goods, sizeof (struct goodprofile), 1, ptt)) ///ok shod
+                {
+                    if(strcmp("food market",goods.type)==0||strcmp("foodmarket",goods.type)==0);
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+                    }
+                }
             }
+            fclose(ptt);
             break;
 
 
         case 5:
             printf("Stationery");
-            //print link list of good in file
-            int n;
-            scanf("%d",&n);
-            printf("if you want to see the sort inter num 1\n");
-            if(n==1)
+            FILE *pty=fopen ("good.bin", "a+b");
+            fseek (pty,-sizeof (struct goodprofile), SEEK_SET);
+            if (pty)
             {
-                ssort('s');
-                //get structure
+                while(fread(&goods, sizeof (struct goodprofile), 1, pty)) ///ok shod
+                {
+                    if(strcmp("stationery",goods.type)==0)
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+                    }
+                }
             }
+            fclose(pty);
             break;
 
 
         case 6:
             printf("Digital goods");
-            //print link list of good in file
-            int k;
-            scanf("%d",&k);
-            printf("if you want to see the sort inter num 1\n");
-            if(k==1)
+            FILE *ptu=fopen ("good.bin", "a+b");
+            fseek (ptu,-sizeof (struct goodprofile), SEEK_SET);
+            if (ptu)
             {
-                // ssort();
-                //get structure
+                while(fread(&goods, sizeof (struct goodprofile), 1, ptu)) ///ok shod
+                {
+                    if(strcmp("Digital goods",goods.type)==0||strcmp("Digital goods",goods.type))
+                {
+                    printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
+                    }
+                }
             }
+            fclose(ptu);
             break ;
 
 
 
         case 7:
+            if(strcmp(type,"guest")!=0)
+            {
+                puts("please inter the name of goods you want to add comment ");
+                char namecom[1000];
+                gets(namecom);
+                FILE *ptr=fopen ("good.bin", "a+b");
+                fseek (ptr,-sizeof (struct goodprofile), SEEK_SET);
+                if (ptr)
+                {
+                    while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
+                    {
+                        if(strcmp(namecom,goods.name)==0)
+                        {
+                            pri
+                            fwrite()
 
-//open file text comment and save comment
+                        }
+                    }
+                }
+                fclose(ptr);
 
-            puts("please inter the number of item you want to add comment");
-            int g1;
-            scanf("%d",&g1);
 
+            }
             break;
 
         case 8:
-            if(c!="guest")
+            if(strcmp(type,"guest")!=0)
             {
                 basket();
             }
@@ -461,6 +559,9 @@ int  survey(char c[])
             break;
 
         }
+
+
+
     }
     while(1);
 }
@@ -617,7 +718,6 @@ void basket()//send file or name of file customer
         }
     }
     while(c!=-1);
-
     // save in file (link list of all buys with the sign recived or non recived structure),save name of custom
     ///sell(sumprice);
     //if sell return 1 ;save link list basket in the sold good link list and clean basket
@@ -731,11 +831,14 @@ void newgood(void)
             printf("please price good");
             scanf("%d",goods.price);
             printf("inter explain for good");
-            scanf("%s",goods.explanation);
+            gets(goods.explanation);
             printf("please inter number of good(inventory)");
             scanf("%d",goods.num);
-            printf("please inter tupe of good");
-            scanf("%s",goods.type);
+            printf("please inter type of good notice must be foodmarket or stationary or Digitalgoods ");
+            gets(goods.type);
+            printf("please inter your name (seller)");
+            gets(goods.nameseller);
+
             int x=fwrite(&goods,sizeof(struct goodprofile),1,ptr);
             fclose(ptr);
         }
