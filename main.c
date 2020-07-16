@@ -1,10 +1,11 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <Windows.h>
 int survey(char type[]);
 int submit();
 void login();
-void seller();
+void seller(char nameseller[]);
 void sell(int price);
 void transfer (int price);
 void admin(void);
@@ -20,6 +21,7 @@ void comment(char c[]);//send name of boss or customer
 void bossmangerin(char c[]);///send name of file of boss too
 void usres(char c[]);//send file of boss
 
+
 typedef struct opinions
 {
     char opinion[10000];
@@ -27,6 +29,8 @@ typedef struct opinions
     int mounth;
     int day;
     int hour;
+    char name[1000];
+    char nameseller[100];
 
 } opinions;
 typedef struct goodprofile//seller
@@ -38,7 +42,7 @@ typedef struct goodprofile//seller
     char type[100];
     int score;
     char nameseller[100];
-    struct opinions opin;
+    int id;
 } good;
 typedef struct member//submit
 {
@@ -57,7 +61,8 @@ typedef struct member//submit
 int main()
 {
     FILE *ptr=fopen("good.bin","a+b");
-    FILE *ptt=fopen("memberspe","a+b");
+    FILE *ptt=fopen("memberspe.bin","a+b");
+    FILE *Ptc=fopen("comment.bin","a+b");
 loop:
     system("color b0");
     system("cls");
@@ -164,7 +169,7 @@ void login()
                 }
                 else if(strcmp(members.type,"seller"))
                 {
-                    seller();
+                    seller(members.name);
                 }
 
 
@@ -215,7 +220,7 @@ void customer()
 
 }
 
-void seller(void)
+void seller(char nameseller[])
 {
     system("color a1");
     system("cls");
@@ -229,7 +234,7 @@ void seller(void)
     {
     case 1:
 
-        newgood();//send file to add good
+        newgood(nameseller);//send file to add good
         break;
     case 2:
         soldgood();//send file of seller
@@ -389,14 +394,14 @@ int  survey(char type[])
         {
             while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
             {
-                printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                printf ("%s  ,%d  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
                 //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
             }
 
             fclose (ptr);
         }
 
-        puts("if you want to see just \n1 super market num4\nstationary num5\ndigital goods num6");
+        puts("if you want to see just9 \n1 super market num4\nstationary num5\ndigital goods num6");
         puts("if you want too add comment num 7\nto buy num 8");
         //open the file of goods &show it(print file)
         //open the file customer or seller or admin
@@ -426,13 +431,13 @@ int  survey(char type[])
                 {
                     if(strcmp(name,goods.name)==0)
                     {
-                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
                 }
             }
             fclose(ptr);
-            ///search(file ,char c[]);
+
             break;
         case 3:
             printf("please inter name of good");
@@ -446,7 +451,7 @@ int  survey(char type[])
                 {
                     if(strcmp(namese,goods.name)==0)
                     {
-                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
 
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
@@ -468,7 +473,7 @@ int  survey(char type[])
                 {
                     if(strcmp("food market",goods.type)==0||strcmp("foodmarket",goods.type)==0);
                     {
-                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
 
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
@@ -488,7 +493,7 @@ int  survey(char type[])
                 {
                     if(strcmp("stationery",goods.type)==0)
                     {
-                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
 
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
@@ -508,7 +513,7 @@ int  survey(char type[])
                 {
                     if(strcmp("Digital goods",goods.type)==0||strcmp("Digital goods",goods.type))
                     {
-                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type,goods.opin.opinion);
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
 
                         //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
@@ -522,55 +527,77 @@ int  survey(char type[])
         case 7:
             if(strcmp(type,"guest")!=0)
             {
+                opinions opin;
                 puts("please inter the name of goods you want to add comment ");
-                char namecom[1000];
-                gets(namecom);
-                FILE *ptr=fopen ("good.bin", "a+b");
-                fseek (ptr,-sizeof (struct goodprofile), SEEK_SET);
-                if (ptr)
-                {
-                    while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
-                    {
-                        if(strcmp(namecom,goods.name)==0)
-                        {
-                            /*pri
-                            fwrite()*/
+                char name[1000];
+                gets(opin.name);
+                FILE *ptc=fopen("comment.bin","a+b");
+                printf("please inter comment");
+                gets(opin.opinion);
+                SYSTEMTIME time;
+                GetSystemTime(&time);
+                opin.day=time.wDay;
+                opin.hour=time.wHour;
+                opin.year=time.wYear;
+                opin.mounth=time.wMonth;
+                fwrite(&opin,sizeof (struct opinions), 1, ptc);
+                fclose(ptc);
 
-                        }
+            }
+            fclose(ptr);
+
+
+
+        break;
+
+    case 8:
+        if(strcmp(type,"guest")!=0)
+        {
+            basket();
+        }
+        break;
+    case 9:
+        {
+            opinions opin;
+            printf("please inter name of good you want to see");
+            char name[1000];
+            gets(name);
+            FILE *ptr=fopen ("good.bin", "a+b");
+            fseek (ptr,-sizeof (struct goodprofile), SEEK_SET);
+            if (ptr)
+            {
+                while(fread(&goods, sizeof (struct goodprofile), 1, ptr)) ///ok shod
+                {
+                    if(strcmp(name,goods.name)==0)
+                    {
+                        printf ("%s  ,%f  ,%s  ,%d   ,%s   %s\n",goods.name,goods.price,goods.explanation,goods.num,goods.type);
+                        printf ("\t%s  %d  %d  %d  %d\n",opin.opinion,opin.mounth,opin.hour,opin.day,opin.year);
+                        //fseek (ptr,-2*sizeof (struct goodprofile), SEEK_CUR);
                     }
                 }
-                fclose(ptr);
-
-
             }
-            break;
-
-        case 8:
-            if(strcmp(type,"guest")!=0)
-            {
-                basket();
-            }
-            break;
-
-
-
-        case -1:
-            return main();
-            break;
-
+            fclose(ptr);
         }
 
 
 
+    case -1:
+        return main();
+        break;
+
     }
-    while(1);
+
+
+
+}
+while(1);
 }
 
 
 
 void ssort(char thing[],char sellername[])
 {
-    if(strcmp(thing,"good"))
+    if(strcmp(thing,"good")==0)
     {
         printf("what kind of sort do you want 1-on price num 1\n 2-on score num 2");
         int a;
@@ -714,9 +741,9 @@ void ssort(char thing[],char sellername[])
                 }
             }
 
-        }
-    }
-    else if()
+        }}
+
+    else if(strcmp(thing,"seller")==0)
     {
         printf("what kind of sort do you want 1-on price num 1\n on history num 2");
         int a;
@@ -733,6 +760,7 @@ void ssort(char thing[],char sellername[])
     }
     else if(strcmp(thing,"seller"))
     {
+        good goods;
         printf("if you want to sort based on number of thing num1\if you want to sort based on score num 2");
         int h;
         scanf("%d",&h);
@@ -747,7 +775,7 @@ void ssort(char thing[],char sellername[])
             {
                 while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
                 {
-                    if(strcmp(goods.nameseller,"ali")==0)
+                    if(strcmp(goods.nameseller,sellername)==0)
                     {
                         printf ("%s,%d,%s,%d,%s  %s\n",goods.name,goods.num,goods.explanation,goods.num);
                         num[0][i]=i;
@@ -1084,7 +1112,7 @@ void specification()
 
 
 
-void newgood(void)
+void newgood(char nameseller[])
 {
     //print all of goods
     //add new good
@@ -1113,7 +1141,6 @@ void newgood(void)
             gets(goods.type);
             printf("please inter your name (seller)");
             gets(goods.nameseller);
-
             int x=fwrite(&goods,sizeof(struct goodprofile),1,ptr);
             fclose(ptr);
         }
@@ -1122,13 +1149,13 @@ void newgood(void)
 
         if(a==2)
         {
-            ssort("seller");
+            ssort("seller","");
         }
 
 
         if(a==3)
         {
-            seller();
+            seller(nameseller);
         }
 
 
