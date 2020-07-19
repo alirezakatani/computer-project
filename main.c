@@ -8,24 +8,28 @@ void login();
 void seller(char nameseller[]);
 void customer(char namecustomer[]);
 int sell(int price);
-void transfer (int price);
+
 void admin(void);
 void ssort(char thing[],char nameseller[]);
 //void search (file,char c[]);
 void basket(char namecu[]);
 void Purchasedgoods(char namecu[]);
 void specification(char name[],char familyname[]);//send file of customer or name
-void showbuy(char c[]);
+//void showbuy(char c[]);
 void newgood();//send file the seller
-void soldgood(void);//send file of customer or boss
-void comment(char c[]);//send name of boss or customer
-void bossmangerin(char c[]);///send name of file of boss too
+ void soldgood(char type[],char name[]);//send file of customer or boss
+void boss(char nameboss[]);
+void bossmangerin(char c[],char nameboss);
 void usres(char c[]);//send file of boss
-void comment(char sellername[]);
+void comment(char sellername[],char type[]);
 void transfer (char nameseller[]);
 char idcards[30];
 char passwords[30];
 char users[30];
+ char idcards[30];
+char passwords[30];
+char users[30];
+int mojoody;
 int mojoody;
 int time;
 int karmozd;
@@ -78,6 +82,7 @@ typedef struct basket
     int mounth;
     int day;
     int hour;
+    int minute;
 
 } baskets;
 typedef struct card
@@ -88,10 +93,16 @@ typedef struct card
     int mojody;
     char type[50];
 } card;
-char idcards[30];
-char passwords[30];
-char users[30];
-int mojoody;
+typedef struct discount
+{
+    char idcard[50];
+    int year;
+    int mounth;
+    int day;
+    int hour;
+    int percent;
+} dis;
+
 int price=100;
 
 
@@ -204,13 +215,17 @@ void login()
         {
             if(strcmp(password,members.password)==0&&strcmp(username,members.username)==0)
             {
-                if(strcmp(members.type,"customer"))
+                if(strcmp(members.type,"customer")==0)
                 {
                     customer(members.name);
                 }
-                else if(strcmp(members.type,"seller"))
+                else if(strcmp(members.type,"seller")==0)
                 {
                     seller(members.name);
+                }
+                else if(strcmp(members.type,"boss")==0)
+                {
+                    boss(members.name);
                 }
 
 
@@ -242,16 +257,16 @@ void customer(char namecustomer[])
         survey("customer",namecustomer);
         break;
     case 2:
-        Purchasedgoods(file or name of file);//sent file or name of file
+        Purchasedgoods(namecustomer);//sent file or name of file
 
         break;
     case 3:
-        specification(namecustomer);
+        specification(namecustomer,"");
         //send the file or name of customer to open the file
         //change address ,username and...with structure send to function
         break;
     case 4:
-        basket(char namecustomer);
+        basket( namecustomer);
         break;
     case 5:
         main();
@@ -278,10 +293,10 @@ void seller(char nameseller[])
         newgood(nameseller);//send file to add good
         break;
     case 2:
-        soldgood();//send file of seller
+        soldgood("seller",nameseller);//send file of seller
         break;
     case 3:
-        specification(nameseller);//send file of seller
+        specification(nameseller,"");//send file of seller
         break;
     case 4:
         survey("guest",nameseller);
@@ -327,7 +342,7 @@ void comment(char sellername[],char type[])
         {
             for(j=i; j<=n; j++)
             {
-                if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j])
+                if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j]))
             {
                 temp=p[0][j];
                     p[0][j]=p[0][i];
@@ -335,7 +350,7 @@ void comment(char sellername[],char type[])
                 }
             }
         }
-        opinions
+
         fseek(fptr,-sizeof(struct opinions),1);
         fclose(fptr);
         for(j=0; j<=n; j++)
@@ -352,8 +367,9 @@ void comment(char sellername[],char type[])
                 }
                 i++;
             }
+            fclose(pte);
         }
-        fclose(pte)
+
     }
     if(strcmp(type,"boss")==0)
     {
@@ -380,7 +396,7 @@ void comment(char sellername[],char type[])
         {
             for(j=i; j<=n; j++)
             {
-                if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j])
+                if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j]))
             {
                 temp=p[0][j];
                     p[0][j]=p[0][i];
@@ -388,7 +404,7 @@ void comment(char sellername[],char type[])
                 }
             }
         }
-        opinions
+
         fseek(fptrbo,-sizeof(struct opinions),1);
         fclose(fptrbo);
         for(j=0; j<=n; j++)
@@ -405,8 +421,9 @@ void comment(char sellername[],char type[])
                 }
                 i++;
             }
+            fclose(pteboos);
         }
-        fclose(pteboos)
+
 
 
 
@@ -416,6 +433,7 @@ void comment(char sellername[],char type[])
     scanf("%d",&c);
     if(c==1)
     {
+        opinions opin;
         FILE *ptc=fopen("comment.bin","a+b");
         printf("please inter comment");
         gets(opin.opinion);
@@ -456,7 +474,7 @@ void comment(char sellername[],char type[])
 
 
 }
-void boss(void)
+void boss(char nameboss[])
 {
     system("color b3");
     system("cls");
@@ -468,37 +486,42 @@ void boss(void)
     switch(a)
     {
     case 1:
-        bossmangerin("discountkode");///send name of file of boss too
+        bossmangerin("discountkode",nameboss);///send name of file of boss too
         break;
     case 2:
-        users();
-        break
+        user();
+        break;
 
     case 3:
-        comment();//send name of boss
+        comment(nameboss,"boss");//send name of boss
         break;
     case 4:
-        soldgood();//send file or name of the boss
+        soldgood("boss",nameboss);//send file or name of the boss
         break;
     case 5:
-        bossmangerin("unrecived");//send file of boss to
+        bossmangerin("unrecived",nameboss);//send file of boss to
 
     }
 
 }
-void bossmangerin(char c[])
+void bossmangerin(char c[],char nameboss)
 {
     if (c=="discountkode")
     {
         //open boss file declare code and ... in it
         printf("if you want to declare discount code num 1\n to declare time to cancel order num2\nwage of order num 3\n to back num -1or 4");
-        int a;
+int a;
         do
         {
             scanf("%d",&a);
-            switch(a)
+            char g;
+
+            gets(g);
+
+
+
+            if(a==1)
             {
-            case 1:
                 FILE *ptr=fopen("dicount.bin","a+b");
                 dis discode;
                 printf("idcard");
@@ -513,22 +536,33 @@ void bossmangerin(char c[])
                 scanf("%d",&discode.hour);
                 fwrite(&discode,sizeof(struct discount),1,ptr);
                 fclose(ptr);
-                break;
-            case 2:
-                printf("please inter time recived");
-                scanf("%d",&time);
-                break;
-            case 3:
-                printf("please inter wage for evry sell");
-                scanf("%d",&karmozd);
-                break;
-            case 4:
-                boss();//send file that recived
-                break;
-
-
-
             }
+
+
+           if(a==2)
+           {
+               printf("please inter time recived");
+                scanf("%d",&time);
+           }
+
+
+           if(a==3)
+           {
+                 printf("please inter wage for evry sell");
+                scanf("%d",&karmozd);
+           }
+
+
+          if(a==4)
+          {
+boss(nameboss);
+          }
+
+                break;
+
+
+
+
         }
         while(a!=-1);
 
@@ -548,11 +582,13 @@ void bossmangerin(char c[])
 
 
 
-void user(char c[])
+void user()
 {
     good goods;
     memb members;
+    baskets bask;
     FILE *ptr=fopen("membersp.bin","r+b");
+    printf("list of all member\n");
     while(fread(&members, sizeof (struct member), 1, ptr)!=0)
     {
         printf("%s  %s ",members.name,members.type);
@@ -562,7 +598,7 @@ int a;
     do
     {
         memb members;
-        basket bask;
+
         int k=0;
         int t=0;
         int i=0;
@@ -587,7 +623,7 @@ int a;
                 p[1][k]=0;
                 while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
                 {
-                    if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0)
+                    if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0&&strcmp(bask.status,"remove")!=0)
                     {
                         p[0][k]=k;
                         p[1][k]+=1;
@@ -640,7 +676,7 @@ int a;
                 p[1][k]=0;
                 while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
                 {
-                    if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0)
+                    if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0&&strcmp(bask.status,"remove")!=0)
                     {
                         p[0][k]=k;
                         p[1][k]+=bask.price;
@@ -780,7 +816,7 @@ int a;
             i=0;
             j=0;
             ///esafe kardan khesarat
-            while(fread(&bask,sizeof(struct basket),1,plk)!=0)
+            while(fread(&bask,sizeof(struct basket),1,plk)!=0&&strcmp(bask.status,"remove")!=0)
             {
                 if(strcmp(bask.nameseller,name)==0)
                 {
@@ -869,7 +905,7 @@ fclose(pmk);
                 p[1][k]=0;
                 while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
                 {
-                    if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0)
+                    if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0&&strcmp(bask.status,"remove")!=0)
                     {
                         p[0][k]=k;
                         p[1][k]+=1;
@@ -922,7 +958,7 @@ fclose(pmk);
                 p[1][k]=0;
                 while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
                 {
-                    if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0)
+                    if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0&&strcmp(bask.status,"remove")!=0)
                     {
                         p[0][k]=k;
                         p[1][k]+=bask.price;
@@ -1179,7 +1215,7 @@ int  survey(char type[],char name[])
             if(strcmp(type,"guest")!=0)
             {
 
-                basket bask;
+                baskets bask;
 
                 int a;
                 do
@@ -1188,7 +1224,7 @@ int  survey(char type[],char name[])
                     scanf("%d",&a);
                     FILE *ptb=fopen("basknotpay.bin","a+b");
                     FILE *ptr=fopen ("good.bin", "a+b");
-                    basket bask;
+                    baskets bask;
                     int number;
                     char name[100];//hazf
                     int idgood=0;
@@ -1227,13 +1263,14 @@ int  survey(char type[],char name[])
                     bask.hour=time.wHour;
                     bask.year=time.wYear;
                     bask.mounth=time.wMonth;
+                    bask.minute=time.wMinute;
                     bask.numbergood=numbergood;
                     strcpy(bask.namecustomer,name);
                     strcpy(bask.nameseller,goods.nameseller);
                     fwrite(&bask,sizeof(basket),1,ptb);
 
                 }
-                while(a!=-1)
+                while(a!=-1);
                 }
 
             break;
@@ -1279,7 +1316,7 @@ int  survey(char type[],char name[])
 void ssort(char thing[],char sellername[])
 {
     baskets bask;
-    if(strcmp(thing,"seller1"))==0)
+    if((strcmp(thing,"seller1"))==0)
     {
 
         printf("if you want to sort based on num");
@@ -1295,7 +1332,7 @@ void ssort(char thing[],char sellername[])
             {
 
                 numb[0][i]=i;
-                numb[1][i]=bask.num;
+                numb[1][i]=bask.numbergood;
                 n++;
 
                 i++;
@@ -1327,6 +1364,7 @@ void ssort(char thing[],char sellername[])
         //fseek (pcc,-sizeof (struct goodprofile), SEEK_SET);
         for(j=0; j<n; j++)
         {
+            good goods;
             FILE *pju=fopen ("basknotpay.bin", "a+b");
             fseek (pju,-sizeof (struct basket), SEEK_SET);
             i=0;
@@ -1343,7 +1381,7 @@ void ssort(char thing[],char sellername[])
 
     }
 
-    if(strcmp(thing,"seller1"))==0)
+    if((strcmp(thing,"seller1"))==0)
     {
 
         printf("if you want to sort based on num \if you want to sort based on histroy num 2");
@@ -1364,7 +1402,7 @@ void ssort(char thing[],char sellername[])
                     {
                         printf ("%s,%d,%s\n",bask.name,bask.price,bask.nameseller);
                         num[0][i]=i;
-                        num[1][i]=bask.num;
+                        num[1][i]=bask.numbergood;
                         n++;
                     }
                     i++;
@@ -1404,6 +1442,7 @@ void ssort(char thing[],char sellername[])
 
             for(j=0; j<n; j++)
             {
+                good goods;
                 FILE *pcc=fopen ("basknotpay.bin", "a+b");
                 fseek (pcc,-sizeof (struct basket), SEEK_SET);
                 i=0;
@@ -1446,7 +1485,7 @@ void ssort(char thing[],char sellername[])
             {
                 for(j=i; j<=n; j++)
                 {
-                    if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j])
+                    if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j]))
                 {
                     temp=p[0][j];
                         p[0][j]=p[0][i];
@@ -1737,7 +1776,7 @@ void ssort(char thing[],char sellername[])
             {
                 for(j=i; j<=n; j++)
                 {
-                    if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j])
+                    if((p[4][i]<p[4][j])||(p[4][i]==p[4][j]&&p[3][i]<p[3][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j])||(p[4][i]==p[4][j]&&p[3][i]==p[3][j]&&p[2][i]<p[2][j]&&p[1][i]<p[1][j]))
                 {
                     temp=p[0][j];
                         p[0][j]=p[0][i];
@@ -1917,12 +1956,6 @@ void ssort(char thing[],char sellername[])
 
 
 
-void search(void)
-{
-    printf("please inter your name ");
-    //get char
-    //search in structures and  if there is exist show it
-}
 
 void Purchasedgoods(char namecu[])//send file customer
 {
@@ -1957,8 +1990,14 @@ void Purchasedgoods(char namecu[])//send file customer
         //divide goods to recived and non recived with time and prin them
         printf("if you want to sort num 1\nand if you want to see the item information num 2\nand back to the last menu num 3");
         int a;
+
         do
         {
+        int idgood;
+        baskets bas;
+        opinions opp;
+        good goods;
+        int numg=0;
             scanf("%d",&a);
             switch(a)
             {
@@ -1967,11 +2006,10 @@ void Purchasedgoods(char namecu[])//send file customer
                 //send strucure
                 break;
             case 2:
-                int idgood;
-                basket bas;
+
                 //good goods;
-                opinions opp;
-                int numg=0;
+
+
                 printf("please inter the number of item ");
                 scanf("%d",&idgood);
                 FILE *pcc=fopen ("basknotpay.bin", "a+b");
@@ -2052,7 +2090,7 @@ void Purchasedgoods(char namecu[])//send file customer
 
         }
         while(a!=-1);
-        return customer();
+        return customer(namecu);
     }
     if(c==1)
     {
@@ -2085,7 +2123,7 @@ void Purchasedgoods(char namecu[])//send file customer
 
 
 }
-void showbuy(char c[])
+/*void showbuy(char c[])
 {
     system("color b2");
     system("cls");
@@ -2109,7 +2147,7 @@ void showbuy(char c[])
         }
     }
     while(a!=-1);
-}
+}*/
 
 
 void basket(char namecu[])//send file or name of file customer
@@ -2210,14 +2248,14 @@ void basket(char namecu[])//send file or name of file customer
             }
 
 
-            mojoody+=((int)price[1][k]*karmozd/100);
+            mojoody+=((int)pricet*karmozd/100);
             fseek(pyy,(t)*(strlen(idcards)+strlen(passwords)+strlen(users)+9),SEEK_SET);
             fprintf(pyy,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
 
         }
         t=0;
         fclose(pyy);
-        *pyy=fopen("idcard.txt","r+");
+        pyy=fopen("idcard.txt","r+");
 
         if (pyy)
         {
@@ -2235,7 +2273,7 @@ void basket(char namecu[])//send file or name of file customer
             }
 
 
-            mojoody-=price[1][k];
+            mojoody-=pricet;
             fseek(pyy,(t)*(strlen(idcards)+strlen(passwords)+strlen(users)+9),SEEK_SET);
             fprintf(pyy,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
 
@@ -2289,7 +2327,7 @@ void basket(char namecu[])//send file or name of file customer
         }
         fclose(ptr);
         fclose(ptf);
-
+good goods;
         while(fread(&goods, sizeof (struct goodprofile), 1, iut)!=NULL) ///ok shod
         {
             printf("%s  %d\n",goods.name,goods.num);
@@ -2307,7 +2345,7 @@ void basket(char namecu[])//send file or name of file customer
         fclose(aut);
         FILE *ptz=fopen ("basknotpay.bin", "a+b");
         int i=0;
-        FILE *ptr;
+
         int idkalas=0;
         while(fread(&bask, sizeof (struct basket), 1, ptz)!=NULL) ///ok shod
         {
@@ -2397,15 +2435,18 @@ int sell(int price)
     system("cls");
     //open the file of customer ,the file of password and id card
     FILE *boosdis=fopen("dicount.bin","a+b");
-    FILE *idcard= fopen("idcard.txt","r+");
-    card idcards;
+    FILE *idca= fopen("idcard.txt","r+");
+    //card idcards;
     printf("if you have discount counter inter discount");
     char idcas[30];
     char passs[30];
     int mojody;
     char dis[20];
     gets(dis);
-    dis disco;
+
+    int id=0;
+    struct discount disco;
+
     SYSTEMTIME time;
     GetSystemTime(&time);
     if(strcmp(dis,"discount")==0)
@@ -2417,9 +2458,9 @@ int sell(int price)
 
             if(strcmp(discode,disco.idcard)==0)
             {
-                if((disco.year<time.wYear)||(disco.year==time.wYear&&disco.mounth<time.wMonth)||(disco.year==time.wYear&&disco.mounth==time.wMonth&&disco.day<time.wDay)||(disco.year==time.wYear&&disco.mounth==time.wMonth&&disco.day==time.wDay&&disco.hour<time.wHour)
+                if((disco.year<time.wYear)||(disco.year==time.wYear&&disco.mounth<time.wMonth)||(disco.year==time.wYear&&disco.mounth==time.wMonth&&disco.day<time.wDay)||(disco.year==time.wYear&&disco.mounth==time.wMonth&&disco.day==time.wDay&&disco.hour<time.wHour))
             {
-                price=(int)(price*((100-disco.percent)/100))
+                price=(int)(price*((100-disco.percent)/100));
                 }
 
             }
@@ -2431,15 +2472,16 @@ int sell(int price)
         printf("please inter your internet password");
         gets(passs);
         int nums=0;
-        while(fscanf(idcard,"%29s %29s %29s %d",idcards,passwords,users,&mojoody))!=EOF)
+
+        while(fscanf(idca,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=EOF)
         {
-            if(strcmp(idcas,idcards)==0&&strcmp(passs,password)==0)
+            if(strcmp(idcas,idcards)==0&&strcmp(passs,passwords)==0)
             {
                 if(price<mojoody)
                 {
                     mojoody-=price;
-                    fseek(idcard,(nums)*(strlen(idcards)+strlen(passwords)+strlen(users)+9),SEEK_SET);
-                    fprintf(idcard,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                    fseek(idca,(nums)*(strlen(idcards)+strlen(passwords)+strlen(users)+9),SEEK_SET);
+                    fprintf(idca,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
                     return 1;
                 }
 
@@ -2447,8 +2489,9 @@ int sell(int price)
             nums++;
         }
     }
+    }
 
-    void specification(char name[])
+   void specification(char name[],char familyname[])
     {
         FILE *ptr=fopen("membersp","r+b");
         memb member;///add name to debug
@@ -2456,7 +2499,7 @@ int sell(int price)
         while(fread(&member, sizeof (struct member), 1, ptr)==0) ///ok shod
         {
 
-            if(strcmp(name,member.name)==0&&strcmp(familyname,member.familyname)==0)
+            if(strcmp(name,member.name)==0)
             {
                 break;
 
@@ -2464,10 +2507,9 @@ int sell(int price)
             id++;
 
         }
-        printf("please inter your name");
+        printf("please inter your name && family name");
         gets(member.name);
-        printf("please inter family name");
-        gets(member.familyname);
+
         puts("user name ");
         gets(member.username);
         puts("password");
@@ -2582,9 +2624,9 @@ int sell(int price)
 
         int c;
         scanf("%d",&c);
-        char str[];///alaki
+        char str[50];///alaki
         gets(str);///alaki
-        basket base;
+        baskets base;
         if (strcmp(type,"seller")==0)
         {
             printf("for see all sold goods and sort them inter 1  for see soldgood just for one good num 2");
