@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1595309213 source:d:\prj\proje asly 3 - copy\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<Windows.h>
+
