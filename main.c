@@ -363,12 +363,10 @@ void comment(char sellername[],char type[])
                 }
             }
         }
-
-        fseek(fptr,-sizeof(struct opinions),1);
         fclose(fptr);
         for(j=0; j<=n; j++)
         {
-            FILE *pte=fopen("basknotpay.bin","a+b");
+            FILE *pte=fopen("comment.bin","a+b");
             fseek (pte,-sizeof (struct opinions), SEEK_SET);
             i=0;
             while(fread(&opin, sizeof (struct opinions), 1, pte)!=NULL) ///ok shod
@@ -422,7 +420,7 @@ void comment(char sellername[],char type[])
         fclose(fptrbo);
         for(j=0; j<=n; j++)
         {
-            FILE *pteboos=fopen("basknotpay.bin","a+b");
+            FILE *pteboos=fopen("comment.bin","a+b");
             fseek (pteboos,-sizeof (struct opinions), SEEK_SET);
             i=0;
             while(fread(&opin, sizeof (struct opinions), 1, pteboos)!=NULL) ///ok shod
@@ -676,12 +674,12 @@ void user()
             while(fread(&members,sizeof(struct member),1,pyu)!=0)
             {
                 p[1][k]=0;
-                while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
+                while(fread(&bask,sizeof(struct basket),1,pre)!=0)
                 {
                     if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0&&strcmp(bask.status,"remove")!=0)
                     {
-                        p[0][k]=k;
-                        p[1][k]+=1;
+                        p[0][n]=k;
+                        p[1][n]+=1;
                         n++;
                     }
                 }
@@ -710,7 +708,7 @@ void user()
             {
                 FILE *poi=fopen("memberspe.bin","a+b");
 
-                while(fread(&members,sizeof(struct member),1,pyu)!=0)
+                while(fread(&members,sizeof(struct member),1,poi)!=0)
                 {
                     if(p[0][i]==j)
                     {
@@ -719,6 +717,7 @@ void user()
                     j++;
 
                 }
+                fclose(poi);
             }
         }
         if(a==2)
@@ -729,12 +728,12 @@ void user()
             while(fread(&members,sizeof(struct member),1,pyu)!=0)
             {
                 p[1][k]=0;
-                while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
+                while(fread(&bask,sizeof(struct basket),1,pre)!=0)
                 {
                     if(strcmp(bask.namecustomer,members.name)==0&&strcmp(members.type,"customer")==0&&strcmp(bask.status,"remove")!=0)
                     {
-                        p[0][k]=k;
-                        p[1][k]+=bask.price;
+                        p[0][n]=k;
+                        p[1][n]+=bask.price;
                         n++;
                     }
                 }
@@ -763,7 +762,7 @@ void user()
             {
                 FILE *poi=fopen("memberspe.bin","a+b");
 
-                while(fread(&members,sizeof(struct member),1,pyu)!=0)
+                while(fread(&members,sizeof(struct member),1,poi)!=0)
                 {
                     if(p[0][i]==j)
                     {
@@ -773,6 +772,7 @@ void user()
 
                 }
             }
+            fclose(poi);
 
         }
         if(a==3)
@@ -830,7 +830,7 @@ void user()
 
         if(a==5)
         {
-            FILE *pgo=fopen("good.bin","r+b");
+
             printf("please inter name you want to remove");
             char name [100];
             char namecu[50][50];
@@ -840,6 +840,7 @@ void user()
             gets(name);
             i=0;
             j=0;
+            FILE *pgo=fopen("good.bin","r+b");
             while(fread(&goods,sizeof(struct goodprofile),1,pgo)!=0)
             {
                 if(strcmp(goods.nameseller,name)==0)
@@ -853,7 +854,7 @@ void user()
                 i++;
             }
             fclose(pgo);
-
+j=0;
             FILE *pyy=fopen("memberspe.bin","r+b");
             int j=0;
             while(fread(&members,sizeof(struct member),1,pyy)!=0)
@@ -881,7 +882,6 @@ void user()
                     price[0][i]=i;
                     price[1][i]=bask.price;
                     pricet+=bask.price;
-
                     i++;
 
                 }
@@ -891,7 +891,7 @@ void user()
             int numg;
             for(j=0; j<i; j++)
             {
-                while(fscanf(pyy,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
+                while(fscanf(puu,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
                 {
                     if(strcmp(namecu[j],users)==0)
                     {
@@ -921,8 +921,8 @@ void user()
 
                 }
                 mojoody-=(price[1][j]-price[1][j]*karmozd/100);
-                fseek(puu,(numg)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-                fprintf(puu,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                fseek(piu,(numg)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
+                fprintf(piu,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
                 numg=0;
             }
             numg=0;
@@ -960,7 +960,7 @@ void user()
             while(fread(&members,sizeof(struct member),1,pyu)!=0)
             {
                 p[1][k]=0;
-                while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
+                while(fread(&bask,sizeof(struct basket),1,pre)!=0)
                 {
                     if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0&&strcmp(bask.status,"remove")!=0)
                     {
@@ -994,7 +994,7 @@ void user()
             {
                 FILE *poi=fopen("memberspe.bin","a+b");
 
-                while(fread(&members,sizeof(struct member),1,pyu)!=0)
+                while(fread(&members,sizeof(struct member),1,poi)!=0)
                 {
                     if(p[0][i]==j)
                     {
@@ -1003,6 +1003,7 @@ void user()
                     j++;
 
                 }
+                fclose(poi);
             }
         }
         if(a==7)
@@ -1013,7 +1014,7 @@ void user()
             while(fread(&members,sizeof(struct member),1,pyu)!=0)
             {
                 p[1][k]=0;
-                while(fread(&bask,sizeof(struct basket),1,pyu)!=0)
+                while(fread(&bask,sizeof(struct basket),1,pre)!=0)
                 {
                     if(strcmp(bask.nameseller,members.name)==0&&strcmp(members.type,"seller")==0&&strcmp(bask.status,"remove")!=0)
                     {
@@ -1047,7 +1048,7 @@ void user()
             {
                 FILE *poi=fopen("memberspe.bin","a+b");
 
-                while(fread(&members,sizeof(struct member),1,pyu)!=0)
+                while(fread(&members,sizeof(struct member),1,poi)!=0)
                 {
                     if(p[0][i]==j)
                     {
@@ -1056,6 +1057,7 @@ void user()
                     j++;
 
                 }
+                fclose(poi);
             }
 
 
@@ -2844,6 +2846,7 @@ void soldgood(char type[],char name[])
                 }
 
             }
+            fclose(poo);
 
 
         }
@@ -2883,6 +2886,7 @@ void soldgood(char type[],char name[])
             }
             fclose(puu);
             ssort("bossall",name);
+            fclose(puu);
 
         }
 
