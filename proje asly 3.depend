@@ -1,5 +1,11 @@
 # depslib dependency file v1.0
-1595309213 source:d:\prj\proje asly 3 - copy\main.c
+1595312451 source:d:\prj\proje asly 3 - copy\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<Windows.h>
+
+1595331689 source:d:\proje asly 3 - copy\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

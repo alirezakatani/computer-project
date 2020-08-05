@@ -22,11 +22,8 @@ void boss(char nameboss[]);
 void bossmangerin(char c[],char nameboss);
 void usres(char c[]);//send file of boss
 void comment(char sellername[],char type[]);
+void defineidcard(void);
 void transfer (char nameseller[]);
-char idcards[30];
-char passwords[30];
-char users[30];
-int mojoody;
 int karmozd;
 
 
@@ -116,7 +113,7 @@ loop:
     system("cls");
     printf("Welcome to the main page of shop \n");
     printf("please inter the number of section you want:))\n");
-    puts("1-for surving number 1\n2-for register number 2\n3-for login number 3");
+    puts("1-for surving number 1\n2-for register number 2\n3-for login number 3\n4-for define card num 4");
     int a;
     scanf("%d",&a);
 
@@ -125,12 +122,16 @@ loop:
     case 1:
 
         survey("guest","");
-
-
+        break;
     case 2:
         submit();
+        break;
     case 3:
         login();
+        break;
+    case 4:
+        defineidcard();
+        break;
     }
 
     return 0;
@@ -267,19 +268,19 @@ void customer(char namecustomer[])
     switch(a)
     {
     case 1:
-        survey("customer",namecustomer);
+        survey("customer",namecustomer);///see good /addcomment /search good /buygood just add
         break;
     case 2:
-        Purchasedgoods(namecustomer);//sent file or name of file
+        Purchasedgoods(namecustomer);///see recived and unrecived good
 
         break;
     case 3:
-        specification(namecustomer,"");
+        specification(namecustomer,"");///change spefication
         //send the file or name of customer to open the file
         //change address ,username and...with structure send to function
         break;
     case 4:
-        basket( namecustomer);
+        basket(namecustomer);///complete buy or remove good
         break;
     case 5:
         main();
@@ -303,28 +304,28 @@ void seller(char nameseller[])
     {
     case 1:
 
-        newgood(nameseller);//send file to add good
+        newgood(nameseller);///add new good for sell(seller) add sort
         break;
     case 2:
-        soldgood("seller",nameseller);//send file of seller
+        soldgood("seller",nameseller);///kalahay frokhte shode
         break;
     case 3:
         specification(nameseller,"");//send file of seller
         break;
     case 4:
-        survey("guest",nameseller);
+        survey("guest",nameseller);///see good
         break;
     case 5:
 
-        transfer(nameseller);//send file or name of the file
+        transfer(nameseller);///esafe kardan kard
         break;
     case 6:
-        comment(nameseller,"seller");
+        comment(nameseller,"seller");///sort by history
         break;
     }
 
 }
-void comment(char sellername[],char type[])
+void comment(char sellername[],char type[])///sort comments based history
 {
     if(strcmp(type,"seller")==0)
     {
@@ -332,13 +333,12 @@ void comment(char sellername[],char type[])
         FILE *fptr=fopen("comment.bin","a+b");
         int p[5][1000];
         int i=0;
-
         int temp;
-        int j=0;;
+        int j=0;
         int n=0;
         while(fread(&opin, sizeof (struct opinions), 1, fptr)!=NULL) ///ok shod
         {
-            if(strcmp(sellername,opin.nameseller)==0)
+            if(strcmp(sellername,opin.nameseller)==0)///sort by history
             {
                 p[0][n]=i;
                 p[1][n]=opin.day;
@@ -382,7 +382,7 @@ void comment(char sellername[],char type[])
         }
 
     }
-    if(strcmp(type,"boss")==0)
+    if(strcmp(type,"boss")==0)///sort comment by history
     {
         opinions opin;
         FILE *fptrbo=fopen("comment.bin","a+b");
@@ -442,7 +442,7 @@ void comment(char sellername[],char type[])
     printf("if you want to add comment num 1 ");
     int c;
     scanf("%d",&c);
-    if(c==1)
+    if(c==1)///add comment
     {
         opinions opin;
         good goods;
@@ -498,27 +498,27 @@ void boss(char nameboss[])
     switch(a)
     {
     case 1:
-        bossmangerin("discountkode",nameboss);///send name of file of boss too
+        bossmangerin("discountkode",nameboss);///add discode
         break;
     case 2:
-        user();
+        user();///delete seller //decrese num good
         break;
 
     case 3:
-        comment(nameboss,"boss");//send name of boss
+        comment(nameboss,"boss");///sort comment &&add comment
         break;
     case 4:
-        soldgood("boss",nameboss);//send file or name of the boss
+        soldgood("boss",nameboss);///see boss good and all seller good
         break;
     case 5:
-        bossmangerin("unrecived",nameboss);//send file of boss to
+        bossmangerin("unrecived",nameboss);///peygiri unrecived bask
 
     }
 
 }
 void bossmangerin(char c[],char nameboss)
 {
-    if (c=="discountkode")
+    if (strcmp(c,"discountkode")==0)
     {
         //open boss file declare code and ... in it
         printf("if you want to declare discount code num 1\n to declare time to cancel order num2\nwage of order num 3\n to back num -1or 4");
@@ -527,14 +527,10 @@ void bossmangerin(char c[],char nameboss)
         {
             scanf("%d",&a);
             char g;
-
             gets(g);
-
-
-
             if(a==1)
             {
-                FILE *ptr=fopen("dicount.bin","a+b");
+                FILE *ptr=fopen("dicount.bin","a+b");///add discode
                 dis discode;
                 printf("idcard");
                 scanf("%s",discode.idcard);
@@ -580,7 +576,7 @@ void bossmangerin(char c[],char nameboss)
 
 
     }
-    else if(c=="unrecived")
+    else if(c=="unrecived")///peygiri unrecived bask
     {
         baskets bask;
         FILE *ptr=fopen("basknotpay.bin","r+b");
@@ -666,7 +662,7 @@ void user()
         char c[50];
         gets(c);
         int idgood=0;
-        if(a==1)
+        if(a==1)///sort by num of basket customer
         {
             int p[2][100];
             FILE *pyu=fopen("memberspe.bin","a+b");
@@ -720,7 +716,7 @@ void user()
                 fclose(poi);
             }
         }
-        if(a==2)
+        if(a==2)///sort basket base on num and customer
         {
             int p[2][100];
             FILE *pyu=fopen("memberspe.bin","a+b");
@@ -771,11 +767,12 @@ void user()
                     j++;
 
                 }
+                fclose(poi);
             }
-            fclose(poi);
+
 
         }
-        if(a==3)
+        if(a==3)///see seller good and decrease num of good
         {
             FILE *pyu=fopen("good.bin","a+b");
             while(fread(&goods,sizeof(struct goodprofile),1,pyu)!=0)
@@ -819,16 +816,10 @@ void user()
                 fwrite(&goods,sizeof(struct goodprofile),1,ptt);
                 fclose(ptt);
 
-
-
             }
-
-
-
-
         }
 
-        if(a==5)
+        if(a==5)///delete seller
         {
 
             printf("please inter name you want to remove");
@@ -841,7 +832,7 @@ void user()
             i=0;
             j=0;
             FILE *pgo=fopen("good.bin","r+b");
-            while(fread(&goods,sizeof(struct goodprofile),1,pgo)!=0)
+            while(fread(&goods,sizeof(struct goodprofile),1,pgo)!=0)///delete all goods of seller
             {
                 if(strcmp(goods.nameseller,name)==0)
                 {
@@ -854,10 +845,10 @@ void user()
                 i++;
             }
             fclose(pgo);
-j=0;
+            j=0;
             FILE *pyy=fopen("memberspe.bin","r+b");
             int j=0;
-            while(fread(&members,sizeof(struct member),1,pyy)!=0)
+            while(fread(&members,sizeof(struct member),1,pyy)!=0)///delete seller member
             {
                 if(strcmp(members.name,name)==0)
                 {
@@ -872,10 +863,12 @@ j=0;
             FILE *plk=fopen ("basknotpay.bin", "a+b");
             i=0;
             j=0;
-            ///esafe kardan khesarat
-            while(fread(&bask,sizeof(struct basket),1,plk)!=0&&strcmp(bask.status,"remove")!=0)
+            ///esafe kardan khesarat be moshtary
+            while(fread(&bask,sizeof(struct basket),1,plk)!=0&&strcmp(bask.status,"removed")!=0&&strcmp(bask.status,"removedbyboss")!=0&&strcmp(bask.status,"buyed")!=0)
             {
-                if(strcmp(bask.nameseller,name)==0)
+
+
+                if(strcmp(bask.nameseller,name)==0)///hesab kol
                 {
                     strcpy(namecu[i],bask.namecustomer);
                     strcpy(namese[i],bask.nameseller);
@@ -885,66 +878,71 @@ j=0;
                     i++;
 
                 }
+                fclose(plk);
             }
-            fclose(plk);
-            FILE *puu=fopen("idcard.txt","r+");
+            card idcard;
+
+
             int numg;
             for(j=0; j<i; j++)
             {
-                while(fscanf(puu,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
+                FILE *puu=fopen("idcard.bin","r+b");
+                while(fread(&idcard,sizeof(struct card),1,puu)!=0)
                 {
-                    if(strcmp(namecu[j],users)==0)
+                    if(strcmp(namecu[j],idcard.user)==0)
                     {
                         break;
                     }
                     numg++;
 
                 }
-                mojoody+=price[1][j];
-                fseek(puu,(numg)*(strlen(idcards)+strlen(passwords)+strlen(users)+9),SEEK_SET);
-                fprintf(puu,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                idcard.mojody+=price[1][j];///esafe kardan pool be moshtary
+                fseek(puu,(numg)*sizeof(struct card),SEEK_SET);
+                fwrite(&idcard,sizeof(struct card),1,puu);
                 numg=0;
+                fclose(puu);
             }
             numg=0;
-            fclose(puu);
-            FILE *piu=fopen("idcard.txt","r+");
+
+            FILE *piu=fopen("idcard.bin","r+b");
 
             for(j=0; j<i; j++)
             {
-                while(fscanf(piu,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
+                card idcard;
+                while(fread(&idcard,sizeof(struct card),1,piu)!=0)
                 {
-                    if(strcmp(namese[j],users)==0)
+                    if(strcmp(namese[j],idcard.user)==0)
                     {
                         break;
                     }
                     numg++;
 
                 }
-                mojoody-=(price[1][j]-price[1][j]*karmozd/100);
-                fseek(piu,(numg)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-                fprintf(piu,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                idcard.mojody-=(price[1][j]-price[1][j]*karmozd/100);///kam kardan poll as seller
+                fseek(piu,(numg)*sizeof(struct card),SEEK_SET);
+                fwrite(&idcard,sizeof(struct card),1,piu);
                 numg=0;
             }
             numg=0;
             fclose(piu);
 
-            FILE *pmk=fopen("idcard.txt","r+");
+            FILE *pmk=fopen("idcard.bin","r+b");
 
             for(j=0; j<i; j++)
             {
-                while(fscanf(pmk,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
+                card id;
+                while(fread(&id,sizeof(struct card),1,pmk)!=0)
                 {
-                    if(strcmp("boss",users)==0)
+                    if(strcmp("boss",id.user)==0)
                     {
                         break;
                     }
                     numg++;
 
                 }
-                mojoody-=(pricet*karmozd/100);
-
-                fseek(pmk,(numg)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-                fprintf(pmk,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                id.mojody-=(pricet*karmozd/100);///kamkardan pool as boss
+                fseek(pmk,(numg)*sizeof(struct card),SEEK_SET);
+                fwrite(&id,sizeof(struct card),1,pmk);
                 numg=0;
             }
 
@@ -952,7 +950,7 @@ j=0;
 
 
         }
-        if(a==6)
+        if(a==6)///sort by num of basket base seller
         {
             int p[2][100];
             FILE *pyu=fopen("memberspe.bin","a+b");
@@ -1006,7 +1004,7 @@ j=0;
                 fclose(poi);
             }
         }
-        if(a==7)
+        if(a==7)///sort basket base seller and price
         {
             int p[2][100];
             FILE *pyu=fopen("memberspe.bin","a+b");
@@ -1073,7 +1071,7 @@ j=0;
 
 
 }
-int  survey(char type[],char name[])
+int  survey(char type[],char name[])///see good /addcomment /search good /buygood
 {
     system("color e1");
     system("cls");
@@ -1101,7 +1099,7 @@ int  survey(char type[],char name[])
     fclose (ptr);
     puts("we have 3itemes now\nif you want to add a filter please inter number1");
     puts("if you want to searching item number2\ for see  item number 3\nand if you want to go to the main page inter -1 ");
-    puts("if you want to see just9 \n1 super market num4\nstationary num5\ndigital goods num6");
+    puts("if you want to see all comment 9\n1 super market num4\nstationary num5\ndigital goods num6");
     puts("if you want too add comment num 7\nto buy num 8");
     int a;
     do
@@ -1122,10 +1120,10 @@ int  survey(char type[],char name[])
         {
         case 1:
             //send goods file to function ssort
-            ssort("goods","");
+            ssort("goods","");///sort good base price score
             break;
 
-        case 2:
+        case 2:///search good
             //send goods file & name that we need to search
             printf("please inter name of good you want to search");
             char namesw[1000];
@@ -1146,7 +1144,7 @@ int  survey(char type[],char name[])
             fclose(ptr);
 
             break;
-        case 3:
+        case 3:///just see a good
             printf("please inter name of good");
             char namese[1000];
             gets(namese);
@@ -1169,7 +1167,7 @@ int  survey(char type[],char name[])
             break;
 
 
-        case 4:
+        case 4:///see just food market
 
             printf("food market");
             FILE *ptz=fopen ("good.bin", "a+b");
@@ -1190,7 +1188,7 @@ int  survey(char type[],char name[])
             break;
 
 
-        case 5:
+        case 5:///see just (stationary)lavazemotahrir
             printf("Stationery");
             FILE *pty=fopen ("good.bin", "a+b");
             fseek (pty,-sizeof (struct goodprofile), SEEK_SET);
@@ -1210,7 +1208,7 @@ int  survey(char type[],char name[])
             break;
 
 
-        case 6:
+        case 6:///see dig
             printf("Digital goods");
             FILE *ptu=fopen ("good.bin", "a+b");
             fseek (ptu,-sizeof (struct goodprofile), SEEK_SET);
@@ -1231,7 +1229,7 @@ int  survey(char type[],char name[])
 
 
 
-        case 7:
+        case 7:///add comment
             if(strcmp(type,"guest")!=0)
             {
 
@@ -1281,16 +1279,13 @@ int  survey(char type[],char name[])
 
             break;
 
-        case 8:
+        case 8:///first step buy
             if(strcmp(type,"guest")!=0)
             {
-
                 baskets bask;
-
                 int a;
                 do
                 {
-
                     FILE *ptb=fopen("basknotpay.bin","a+b");
                     FILE *ptr=fopen ("good.bin", "a+b");
                     baskets bask;
@@ -1346,7 +1341,7 @@ int  survey(char type[],char name[])
 
 
             break;
-        case 9:
+        case 9:///see all comments for good
         {
             opinions opin;
             printf("please inter name of good you want to see");
@@ -1390,7 +1385,7 @@ int  survey(char type[],char name[])
 
 
 
-void ssort(char thing[],char sellername[])
+void ssort(char thing[],char namesend[])
 {
     baskets bask;
     if((strcmp(thing,"seller1"))==0)
@@ -1415,7 +1410,7 @@ void ssort(char thing[],char sellername[])
             }
             numb[2][i+1]=0;
         }
-        //fclose(pmk);
+        fclose(pmk);
 
         int temp=0;
         int temp1=0;
@@ -1453,8 +1448,9 @@ void ssort(char thing[],char sellername[])
                 i++;
 
             }
+            fclose(pju);
         }
-        seller(sellername);
+        seller(namesend);
     }
 
     if((strcmp(thing,"seller1"))==0)
@@ -1476,7 +1472,7 @@ void ssort(char thing[],char sellername[])
             {
                 while(fread(&bask, sizeof (struct basket), 1, pyy)!=0) ///ok shod
                 {
-                    if(strcmp(bask.nameseller,sellername)==0)///dorost she
+                    if(strcmp(bask.nameseller,namesend)==0)///dorost she
                     {
                         printf ("%s,%d,%s\n",bask.name,bask.price,bask.nameseller);
                         num[0][j]=i;
@@ -1488,7 +1484,7 @@ void ssort(char thing[],char sellername[])
                 }
                 num[2][i+1]=0;
             }
-            //fclose(pyy);
+            fclose(pyy);
             for(i=0; i<n; i++)
             {
                 printf("%d   %d\n",num[0][i],num[1][i]);
@@ -1534,7 +1530,9 @@ void ssort(char thing[],char sellername[])
                     i++;
 
                 }
+                fclose(pcc);
             }
+
         }
         if(h==2)
         {
@@ -1548,7 +1546,7 @@ void ssort(char thing[],char sellername[])
             int k=0;
             while(fread(&base, sizeof (struct basket), 1, fptr)!=NULL) ///ok shod
             {
-                if(strcmp(sellername,base.nameseller)==0)
+                if(strcmp(namesend,base.nameseller)==0)
                 {
                     p[0][k]=i;
                     p[1][k]=base.day;
@@ -1593,18 +1591,18 @@ void ssort(char thing[],char sellername[])
             }
 
         }
-        seller(sellername);
+        seller(namesend);
 
     }
 
 
 
-    if(strcmp(thing,"goods")==0)
+    if(strcmp(thing,"goods")==0)///sort good base price score
     {
         printf("what kind of sort do you want 1-on price num 1\n 2-on score num 2");
         int a;
         scanf("%d",&a);
-        if(a==1)
+        if(a==1)///sort price
         {
             //print structure on price
             good goods;
@@ -1675,7 +1673,7 @@ void ssort(char thing[],char sellername[])
 
 
         }
-        else
+        else///sort base score survey
         {
 
             int score[2][1000];
@@ -1746,13 +1744,13 @@ void ssort(char thing[],char sellername[])
         }
     }
 
-    else if(strcmp(thing,"customer")==0)
+    else if(strcmp(thing,"customer")==0)///sort recived good based on price and history
     {
         printf("what kind of sort do you want 1-on price num 1\n on history num 2");
         int a;
         scanf("%d",&a);
         int k=0;
-        if(a==1)
+        if(a==1)///sort recived good by price
         {
             //print structure on price
             baskets sortp;
@@ -1766,7 +1764,7 @@ void ssort(char thing[],char sellername[])
             {
                 while(fread(&sortp, sizeof (struct basket), 1, pyy)!=0) ///ok shod
                 {
-                    if(strcmp(sortp.namecustomer,sellername)==0)
+                    if(strcmp(sortp.namecustomer,namesend)==0&&strcmp(sortp.status,"removed")!=0&&strcmp(sortp.status,"removedbyboss")!=0)
                     {
                         price[0][k]=i;
                         price[1][k]=sortp.price;
@@ -1830,7 +1828,7 @@ void ssort(char thing[],char sellername[])
 
 
         }
-        else
+        else///sort recived good by price
         {
             FILE *fptr=fopen("basknotpay.bin","a+b");
             int p[5][1000];
@@ -1843,7 +1841,7 @@ void ssort(char thing[],char sellername[])
             while(fread(&basks, sizeof (struct basket), 1, fptr)!=NULL) ///ok shod
             {
 
-                if(strcmp(sellername,basks.namecustomer)==0)
+                if(strcmp(namesend,basks.namecustomer)==0)
                 {
                     p[0][k]=i;
                     p[1][k]=basks.day;
@@ -1887,9 +1885,9 @@ void ssort(char thing[],char sellername[])
                 }
             }
         }
-        customer(sellername);
+        customer(namesend);
     }
-    else if(strcmp(thing,"seller")==0)
+    else if(strcmp(thing,"seller")==0)///sort kalahy froshandeh base num score
     {
         good goods;
         printf("if you want to sort based on number of thing num1\if you want to sort based on score num 2");
@@ -1907,7 +1905,7 @@ void ssort(char thing[],char sellername[])
             {
                 while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
                 {
-                    if(strcmp(goods.nameseller,sellername)==0)
+                    if(strcmp(goods.nameseller,namesend)==0)
                     {
                         printf ("%s  %d  %s  %d\n",goods.name,goods.num,goods.explanation,goods.price);
                         num[0][j]=i;
@@ -1979,7 +1977,7 @@ void ssort(char thing[],char sellername[])
             {
                 while(fread(&goods, sizeof (struct goodprofile), 1, pyy)!=0) ///ok shod
                 {
-                    if(strcmp(goods.nameseller,sellername)==0)
+                    if(strcmp(goods.nameseller,namesend)==0)
                     {
 
                         printf ("%s,%d,%s  %d\n",goods.name,goods.score,goods.explanation,goods.num);
@@ -2038,14 +2036,14 @@ void ssort(char thing[],char sellername[])
 
         }
     }
-    seller(sellername);
+    seller(namesend);
 }
 
 
 
 
 
-void Purchasedgoods(char namecu[])//send file customer
+void Purchasedgoods(char namecu[])///see recived and unrecived good
 {
 
     system("color b2");
@@ -2057,7 +2055,7 @@ void Purchasedgoods(char namecu[])//send file customer
         printf("if you want to see recived goods num 0\nnon recived goods num1");
         int c;
         scanf("%d",&c);
-        if(c==0)
+        if(c==0)///recived good
         {
             FILE *prr=fopen("basknotpay.bin","a+b");
             int id=0;
@@ -2065,9 +2063,8 @@ void Purchasedgoods(char namecu[])//send file customer
             SYSTEMTIME time;
             GetSystemTime(&time);
 
-            while(fread(&bask, sizeof (struct basket), 1, prr)!=NULL) ///ok shod///after one hour
+            while(fread(&bask, sizeof (struct basket), 1, prr)!=NULL) ///check time daryaft
             {
-
                 if(((timerecived)>=(time.wMinute-bask.minute)+((time.wHour-bask.hour)*60)+((time.wDay-bask.day)*3600))&&(strcmp(bask.namecustomer,namecu)==0&&(strcmp(bask.status,"buyed")==0)))
                 {
                     printf(" %s %s %s  ",bask.name,bask.nameseller,bask.status);
@@ -2094,14 +2091,13 @@ void Purchasedgoods(char namecu[])//send file customer
             scanf("%d",&a);
             switch(a)
             {
-            case 1:
+            case 1:///sort recived good based history
                 ssort("customer",namecu);
                 //send strucure
                 break;
-            case 2:
+            case 2:///see item informatiom and add comment
 
                 //good goods;
-
 
                 printf("please inter the number of item ");
                 scanf("%d",&idgood);
@@ -2179,7 +2175,7 @@ void Purchasedgoods(char namecu[])//send file customer
             case 3:
                 return customer(namecu);
                 break;
-            case 4:
+            case 4:///tell unrecived good to boss
                 printf("please inter id number ");
                 scanf("%d",&idgood);
                 FILE *ptr=fopen ("basknotpay.bin", "r+b");
@@ -2205,7 +2201,7 @@ void Purchasedgoods(char namecu[])//send file customer
 
             return customer(namecu);
         }
-        if(c==1)
+        if(c==1)///see all nonrecived by time
         {
             FILE *pll=fopen("basknotpay.bin","a+b");
             printf("your goods that in way is\n");
@@ -2228,14 +2224,12 @@ void Purchasedgoods(char namecu[])//send file customer
 
 
                 id++;
+                printf("if you want to exit num -1");
+                scanf("%d",&a);
 
             }
-            printf("what section do you want to change");
-
             fclose(pll);
-            printf("if you want to exit num -1");
 
-            scanf("%d",&a);
 
 
         }
@@ -2273,7 +2267,7 @@ void Purchasedgoods(char namecu[])//send file customer
 }*/
 
 
-void basket(char namecu[])//send file or name of file customer
+void basket(char namecu[])///complete buy or remove good
 {
     baskets bask;
     int id=0;
@@ -2284,7 +2278,7 @@ void basket(char namecu[])//send file or name of file customer
         if(strcmp(bask.status,"removed")!=0&&strcmp(bask.status,"removedbyboss")!=0)
         {
             printf(" %s %s %s %d ",bask.name,bask.nameseller,bask.status,bask.price);
-        printf("%d\n",id);
+            printf("%d\n",id);
 
         }
         id++;
@@ -2307,7 +2301,7 @@ void basket(char namecu[])//send file or name of file customer
 
         printf("if you want to finish buying nember 2 \n for remove number 1 ");
         scanf("%d",&a);
-        if(a==1)
+        if(a==1)///remove item from customer
         {
             int i=0;
             FILE *pty=fopen("basknotpay.bin","r+b");
@@ -2332,7 +2326,7 @@ void basket(char namecu[])//send file or name of file customer
     while(a!=2);
     FILE *pee=fopen("basknotpay.bin","a+b");
 
-    while(fread(&bask, sizeof (struct basket), 1,pee)!=NULL) ///ok shod
+    while(fread(&bask, sizeof (struct basket), 1,pee)!=NULL) ///finish buy
     {
         if(strcmp(bask.status,"remove")!=0&&strcmp(bask.status,"removedbyboss")!=0)
         {
@@ -2350,7 +2344,6 @@ void basket(char namecu[])//send file or name of file customer
     if(sell(pricet)==1)
     {
         int num=0;
-
         FILE *aut=fopen ("basknotpay.bin", "a+b");
         FILE *iut=fopen ("good.bin", "r+b");
         ///variz be hesab froshandejh
@@ -2359,26 +2352,18 @@ void basket(char namecu[])//send file or name of file customer
         card idca;
         int idk=0;
         int numpr=0;
-        ///variz be boss
+
         k=0;
         t=0;
-
-
-        char idcards[30];
-        char passwords[30];
-        char users[30];
-
+        card idcard;
         int t=0;
-        FILE *pyy=fopen("idcard.txt","r+");
-        fseek (pyy,0, SEEK_SET);
-
+        FILE *pyy=fopen("idcard.bin","r+b");///variz poll  be boss
         if (pyy)
         {
-
-            while(fscanf(pyy,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0)
+            while(fwrite(&idcard,sizeof(struct card),1,pyy)!=0)
             {
 
-                if(strcmp(users,"boss")==0)
+                if(strcmp(idcard.user,"boss")==0)
                 {
                     break;
 
@@ -2387,9 +2372,9 @@ void basket(char namecu[])//send file or name of file customer
 
             }
 
-            mojoody+=((int)pricet*karmozd/100);
-            fseek(pyy,(t)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-            fprintf(pyy,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+            idcard.mojody+=((int)pricet*karmozd/100);
+            fseek(pyy,(t)*sizeof(struct card),SEEK_SET);
+            fwrite(&idcard,sizeof(struct card),1,pyy);
 
         }
         t=0;
@@ -2421,18 +2406,18 @@ void basket(char namecu[])//send file or name of file customer
 
 
         int price[2][100];
-k=0;
-idk=0;
-numpr=0;
- FILE *ptf=fopen ("basknotpay.bin", "a+b");
-        while(fread(&bask, sizeof (struct basket), 1, ptf)!=NULL) ///ok shod
+        k=0;
+        idk=0;
+        numpr=0;
+        FILE *ptf=fopen ("basknotpay.bin", "a+b");
+        card id;
+        while(fread(&bask, sizeof (struct basket), 1, ptf)!=NULL) ///ok shod  ///variz be hesab froshandejh
         {
-            ptr=fopen("idcard.txt","r+");
-            while(fscanf(ptr,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0) ///ok shod
+            ptr=fopen("idcard.bin","r+b");
+            while(fread(&id,sizeof(struct card),1,ptr)!=0) ///ok shod
             {
-                if(strcmp(bask.nameseller,users)==0&&strcmp(bask.status,"removed")!=0&&strcmp(bask.status,"buyed")!=0)
+                if(strcmp(bask.nameseller,id.user)==0&&strcmp(bask.status,"removed")!=0&&strcmp(bask.status,"buyed")!=0)
                 {
-
 
                     price[0][k]=idk;
                     price[1][k]=bask.price;
@@ -2444,13 +2429,14 @@ numpr=0;
         }
         fclose(ptr);
         fclose(ptf);
-t=0;
+        t=0;
 
         for(k=0; k<numpr; k++)
         {
-            iut=fopen("idcard.txt","r+");
+            card ids;
+            iut=fopen("idcard.bin","r+b");
             fseek (iut,0, SEEK_SET);
-            while(fscanf(iut,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=0) ///ok shod
+            while(fread(&ids,sizeof(struct card),1,ptr)!=0) ///ok shod
             {
                 if(price[0][k]==t)
                 {
@@ -2460,28 +2446,20 @@ t=0;
                 t++;
 
             }
-            mojoody+=(price[1][k]-((int)price[1][k]*karmozd/100));
-            fseek(iut,(t)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-            fprintf(iut,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+            ids.mojody+=(price[1][k]-((int)price[1][k]*karmozd/100));
+            fseek(iut,(t)*sizeof(struct card),SEEK_SET);
+            fwrite(&ids,sizeof(struct card),1,iut);
             t=0;
             fclose(iut);
 
         }
 
-        fclose(ptf);
         good goods;
 
-        printf("bask\n\n\n");
-        while(fread(&bask, sizeof (struct basket), 1, aut)!=NULL) ///ok shod
-        {
-            printf("%s %d  %d\n",bask.name,bask.numbergood,bask.status);
 
-
-        }
         int n[20][100];
-        fclose(iut);
-        fclose(aut);
-        FILE *ptz=fopen ("basknotpay.bin", "a+b");
+
+        FILE *ptz=fopen ("basknotpay.bin", "a+b");///kam kardan mojoody kala
         int i=0;
         int idkalas=0;
         while(fread(&bask, sizeof (struct basket), 1, ptz)!=NULL) ///ok shod
@@ -2608,21 +2586,22 @@ int sell(int price)
         }
     }
     printf("please inter your id card");
-   gets(idcas);
+    gets(idcas);
     printf("please inter your internet password");
     gets(passs);
     int nums=0;
-    FILE *idca= fopen("idcard.txt","r+");
-    while(fscanf(idca,"%29s %29s %29s %d",idcards,passwords,users,&mojoody)!=EOF)
+    card car;
+    FILE *idca= fopen("idcard.bin","r+b");
+    while(fwrite(&car,sizeof(struct card),1,idca)!=0)
     {
-        if(strcmp(idcas,idcards)==0&&strcmp(passs,passwords)==0)
+        if(strcmp(idcas,car.id)==0&&strcmp(passs,car.netpass)==0)
         {
-           if(price<mojoody)
+            if(price<car.mojody)
             {
-                printf("%s  %d",idcards,mojoody);
-                mojoody-=price;
-                fseek(idca,(nums)*(strlen(idcards)+strlen(passwords)+strlen(users)+sizeof(mojoody)+2),SEEK_SET);
-                fprintf(idca,"\n%s %s %s %d\n",idcards,passwords,users,mojoody);
+                printf("%s  %d",car.id,car.mojody);
+                car.mojody-=price;
+                fseek(idca,(nums)*sizeof(struct card),SEEK_SET);
+                fwrite(&car,sizeof(struct card),1,idca);
                 fclose(idca);
                 fclose(boosdis);
                 return 1;
@@ -2637,7 +2616,7 @@ int sell(int price)
 }
 
 
-void specification(char name[],char familyname[])
+void specification(char name[],char familyname[])///change spefication
 {
     FILE *ptr=fopen("memberspe.bin","r+b");
     fseek(ptr,-sizeof(struct member),SEEK_SET);
@@ -2705,7 +2684,7 @@ void newgood(char nameseller[])
     //add new good
     //sort good
 
-    puts("if you want to add good inter addgood\n and sort the good inter sort\n to back num3\n and add to Inventory num 4 ");
+    puts("if you want to add good inter 1\n and sort the good 2\n to back num3\n and add to Inventory num 4 ");
     int a;
     int id=0;
     good goods;
@@ -2731,7 +2710,7 @@ void newgood(char nameseller[])
         char c[5];///alaki
         gets(c);///alaki
 
-        if(a==1)
+        if(a==1)///add good seller
         {
             FILE *ptr=fopen("good.bin","a+b");
             printf("please inter name of good");
@@ -2753,7 +2732,7 @@ void newgood(char nameseller[])
 
         if(a==2)
         {
-            ssort("seller",nameseller);
+            ssort("seller",nameseller);///sort kalahy froshandeh base num score
         }
 
 
@@ -2761,7 +2740,7 @@ void newgood(char nameseller[])
         {
             seller(nameseller);
         }
-        if(a==4)
+        if(a==4)///esafe kardan mojoody
         {
 
             FILE *ptr=fopen ("good.bin", "r+b");
@@ -2804,15 +2783,16 @@ void soldgood(char type[],char name[])
 {
     good goods;
     printf("for see all sold goods and sort them inter 1  for see soldgood just for one good num 2");
-    int c;
-    scanf("%d",&c);
-    char str[50];///alaki
-    gets(str);///alaki
+
+    ;///alaki
     baskets base;
     if (strcmp(type,"seller")==0)
     {
-
-        if(c==1)
+        int c;
+        scanf("%d",&c);
+        char str[50];///alaki
+        gets(str);
+        if(c==1)///see all soldgood
         {
 
             FILE *pcc=fopen ("basknotpay.bin", "a+b");
@@ -2830,7 +2810,7 @@ void soldgood(char type[],char name[])
             ssort("seller1",name);
 
         }
-        else if(c==2)
+        else if(c==2) ///see just one sold good
         {
             int id=0;
 
@@ -2853,10 +2833,10 @@ void soldgood(char type[],char name[])
     }
 
 
-    else if(strcmp(type,"boss")==0)
+    else if(strcmp(type,"boss")==0)///see boss good and all seller good
     {
 
-        printf("if you want to see your soldgoods num 1");
+        printf("if you want to see your soldgoods num 1 /n for see all seller good");
         int f;
         scanf("%d",&f);
         if(f==1)
@@ -2875,7 +2855,7 @@ void soldgood(char type[],char name[])
             fclose(plo);
             ssort("seller1",name);
         }
-        if(f==2)
+        if(f==2)///all seller
         {
             FILE *puu=fopen ("basknotpay.bin", "a+b");
             fseek (puu,-sizeof (struct basket), SEEK_SET);
@@ -2895,30 +2875,43 @@ void soldgood(char type[],char name[])
 
 
 }
+void defineidcard()
+{
+    card idcard;
+    FILE *ptr=fopen("idcard.bin","a+b");
+    printf("please inter your idcard");
+    char c[50];
+    gets(c);
+    gets(idcard.id);
+    printf("inter net pass");
+    gets(idcard.netpass);
+    printf("please inter your name");
+    gets(idcard.user);
+    printf("please inter your type boss customer seller");
+    gets(idcard.type);
+    idcard.mojody=0;
+    fwrite(&idcard,sizeof(struct card),1,ptr);
+    fclose(ptr);
+}
 
 void transfer (char nameseller[])//send file or name of the file of seller
 {
-    FILE *ptr=fopen("idcard.txt","w");
+    card idcard;
+    FILE *ptr=fopen("idcard.bin","a+b");
     printf("please inter your idcard");
-    char c[50];///alaki
-    gets(c);///alaki
-    gets(idcards);
-    mojoody=0;
-    printf("please inter net pass (not important)");
-    gets(passwords);
-    strcpy(users,nameseller);
-    fprintf(ptr,"%s %s %s %d\n",idcards,passwords,users,mojoody);
+    gets(idcard.id);
+    printf("inter net pass");
+    gets(idcard.netpass);
+    strcpy(idcard.type,"seller");
+    idcard.mojody=0;
+    strcpy(idcard.user,nameseller);
+    fwrite(&idcard,sizeof(struct card),1,ptr);
     fclose(ptr);
-    seller(nameseller);
-
-
 }
-
-
 
 
 
 
 ///format card bank  char idcard[30]--char password[30]--int mojoody
 
-
+///end of project  and debuging 9:39  99/31/04
